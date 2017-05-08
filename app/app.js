@@ -83,22 +83,12 @@ var selectAirStatus = function (db, callback) {
     //连接到表
     var collection = db.collection("airController");
     //查询“controller”控制器的状态
-    /*collection.find({"_id": "590c198217daf526dcd31c65"}).toArray(function (err, result) {
-
-        if(err) {
-            console.log("Error:" + err);
-        }
-        callback(result);
-    })*/
-
-    collection.find({_id: 'ObjectId("590c198217daf526dcd31c65")'}).toArray(function (err, result) {
+    collection.find({"name": "airController"}).toArray(function (err, result) {
         if(err) {
             console.log("Error:" + err);
         }
         callback(result);
     });
-
-    // collection.find({}, {"constoller": 1});
 };
 
 //查询空气净化器状态
@@ -107,16 +97,43 @@ app.get("/get_air", function (req, res, next) {
         console.log("连接成功！");
 
         selectAirStatus(db, function(result) {
-            /*var selectResult = JSON.stringify(result);
-            console.log(selectResult);
-            db.close();*/
-            // var selectResult = result;
             var selectResult = JSON.stringify(result);
             console.log(selectResult);
             db.close();
             res.end(selectResult);
             next();
         });
+    });
+});
+
+//修改空气净化器开关状态
+//接收改变参数
+var changeAirStatus = function(db, callback, data) {
+    //连接到表
+    var collection = db.collection('airController');
+    //更新数据
+    var whereStr = {name: "airController"};
+    var updateStr = {$set: { "controller": data}};
+    collection.update(whereStr,updateStr, function(err, result) {
+        if(err) {
+            console.log('Error:'+ err);
+            return;
+        }
+        callback(result);
+    });
+};
+
+app.post('/change_air_status', function (req, res, next) {
+    var changeData = req.body;
+    console.log(changeData);
+
+    MongoClient.connect(DB_CONN_STR, function(err, db) {
+        console.log("连接成功！");
+        changeAirStatus(db, function(result) {
+            // console.log(result);
+            res.end(JSON.stringify(result));
+            next();
+        }, changeData);
     });
 });
 
