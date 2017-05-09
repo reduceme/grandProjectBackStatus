@@ -1,6 +1,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var MongoClient = require('mongodb').MongoClient;
+
 var DB_CONN_STR = 'mongodb://localhost:27017/weatherDB';
 var app = express();
 
@@ -39,7 +40,11 @@ var selectData = function(db, callback, time) {
     //连接到表
     var collection = db.collection("aqi");
     //查询数据
-    collection.find(time).toArray(function(err, result) {
+    // collection.find(time).toArray(function(err, result) {
+
+    // var whereStr = {"time": "1494317100000"};
+    // console.log(whereStr);
+    collection.find(time).toArray(function (err, result) {
         if(err) {
             console.log('Error:'+ err);
             return;
@@ -52,15 +57,6 @@ var selectData = function(db, callback, time) {
 app.post('/search', function (req, res, next) {
     var searchData = req.body;
     console.log(searchData);
-    // var selectResult = "";
-    //插入数据
-    /*mongodb.connect(DB_CONN_STR, function(err, db) {
-     console.log("连接成功！");
-     insertData(db, function(result) {
-     console.log(result);
-     db.close();
-     }, data);
-     });*/
 
     //查询数据
     MongoClient.connect(DB_CONN_STR, function(err, db) {
