@@ -40,7 +40,6 @@ var selectData = function(db, callback, time) {
     //连接到表
     var collection = db.collection("aqi");
     //查询数据
-    // collection.find({"time": {"$gte": 1494317098000, "$lte": 1494317102000}}).toArray(function (err, result) {
     collection.find({"time": {"$gte": time.start, "$lte": time.end}}).toArray(function (err, result) {
         if(err) {
             console.log('Error:'+ err);
@@ -53,14 +52,6 @@ var selectData = function(db, callback, time) {
 //选择日期查询
 app.post('/search', function (req, res, next) {
     var searchData = req.body;
-    // parseInt(searchData.start);
-    // parseInt(searchData.end);
-    console.log(searchData);
-
-    // console.log(typeof parseInt(searchData.start));
-    // console.log(typeof parseInt(searchData.end));
-    console.log(searchData);
-
     //查询数据
     MongoClient.connect(DB_CONN_STR, function(err, db) {
         console.log("连接成功！");
@@ -95,7 +86,6 @@ app.get("/get_air", function (req, res, next) {
 
         selectAirStatus(db, function(result) {
             var selectResult = JSON.stringify(result);
-            console.log(selectResult);
             db.close();
             res.end(selectResult);
             next();
