@@ -40,11 +40,8 @@ var selectData = function(db, callback, time) {
     //连接到表
     var collection = db.collection("aqi");
     //查询数据
-    // collection.find(time).toArray(function(err, result) {
-
-    // var whereStr = {"time": "1494317100000"};
-    // console.log(whereStr);
-    collection.find(time).toArray(function (err, result) {
+    // collection.find({"time": {"$gte": 1494317098000, "$lte": 1494317102000}}).toArray(function (err, result) {
+    collection.find({"time": {"$gte": time.start, "$lte": time.end}}).toArray(function (err, result) {
         if(err) {
             console.log('Error:'+ err);
             return;
@@ -56,11 +53,18 @@ var selectData = function(db, callback, time) {
 //选择日期查询
 app.post('/search', function (req, res, next) {
     var searchData = req.body;
+    // parseInt(searchData.start);
+    // parseInt(searchData.end);
+    console.log(searchData);
+
+    // console.log(typeof parseInt(searchData.start));
+    // console.log(typeof parseInt(searchData.end));
     console.log(searchData);
 
     //查询数据
     MongoClient.connect(DB_CONN_STR, function(err, db) {
         console.log("连接成功！");
+
         selectData(db, function(result) {
             var selectResult = JSON.stringify(result);
             console.log(selectResult);
@@ -69,9 +73,6 @@ app.post('/search', function (req, res, next) {
             next();
         }, searchData);
     });
-
-    console.log(selectResult);
-    // res.end("{time: 123456789,aqi: 20}");
 });
 
 //查询空气净化器状态
