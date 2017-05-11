@@ -52,6 +52,7 @@ var selectData = function(db, callback, time) {
 //选择日期查询
 app.post('/search', function (req, res, next) {
     var searchData = req.body;
+    console.log(searchData);
     //查询数据
     MongoClient.connect(DB_CONN_STR, function(err, db) {
         console.log("连接成功！");

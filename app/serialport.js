@@ -57,7 +57,7 @@ port.open(function (error) {
             var quality = [(data[2] + data[3] * 256) / 10, (data[4] + data[5] * 256) / 10];
             // console.log(array);
             var AQI = {
-                "time": (Math.ceil(new Date().getTime() / 1000)).toString(),
+                "time": (Math.ceil(new Date().getTime() / 1000)).toString(  ),
                 // "time": new Date(),
                 "PM2_5": quality[0],
                 "PM10": quality[1]
