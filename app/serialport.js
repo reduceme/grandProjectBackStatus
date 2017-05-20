@@ -37,7 +37,7 @@ var insertData = function(db, callback, data) {
 };
 
 var port = new SerialPort(
-    "COM3", {
+    "COM5", {
         baudRate: 9600,  //波特率
         dataBits: 8,    //数据位
         parity: 'none',   //奇偶校验
@@ -53,12 +53,9 @@ port.open(function (error) {
         console.log("打开端口成功，正在监听数据中...");
         port.on('data', function (data) {
             console.log(new Date());
-            // console.log(data);
             var quality = [(data[2] + data[3] * 256) / 10, (data[4] + data[5] * 256) / 10];
-            // console.log(array);
             var AQI = {
-                "time": (Math.ceil(new Date().getTime() / 1000)).toString(  ),
-                // "time": new Date(),
+                "time": (Math.ceil(new Date().getTime() / 1000)).toString(),
                 "PM2_5": quality[0],
                 "PM10": quality[1]
             };
