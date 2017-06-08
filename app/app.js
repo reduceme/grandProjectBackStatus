@@ -145,7 +145,7 @@ app.post('/change_air_status', function (req, res, next) {
         });*/
 
         /*port.on('open', function() {
-            port.write('H', function(err) {
+            port.write(lightFlag, function(err) {
                 if (err) {
                     return console.log('Error on write: ', err.message);
                 }
@@ -167,9 +167,9 @@ app.post('/change_air_status', function (req, res, next) {
                     console.log("no message;")
                 }
             });*/
-            port.on('data', function (data) {
+            /*port.on('data', function (data) {
                 console.log('Data: ' + data);
-            });
+            });*/
         });
 
         port.close(function (err) {
